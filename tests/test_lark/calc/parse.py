@@ -1,15 +1,12 @@
-import os
-from lark import Lark, InlineTransformer
-
 # TODO : lark grammar importer
 # __path__ = os.path.dirname(__file__)
 #
 # with open(os.path.join(__path__, "calc.lark")) as f:
 #     calc_parser = Lark(f, parser='lalr')
 
-import lark_import
+from palimport import lark
 
-with lark_import.importer():  #parser='lalr'):
+with lark.importer():  #parser='lalr'):
     from . import calc
 
 

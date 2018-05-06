@@ -1,9 +1,6 @@
 import pytest
 
-try:
-    from ..parse import calc
-except SystemError:
-    from test.calc.parse import calc
+from ..parse import calc
 
 
 def test_calc_add():

@@ -12,11 +12,15 @@ class LarkLoader(filefinder2.machinery.SourceFileLoader):
     Python Loader for Lark files.
     """
 
-    def __init__(self, fullname, path):
+    def __init__(self, fullname, path, *Lark_args, **Lark_kwargs):
 
         self.logger = logging.getLogger(__name__)
         # to normalize input
         path = os.path.normpath(path)
+
+        # storing Lark arguments
+        self.args = Lark_args
+        self.kwargs = Lark_kwargs
 
         # relying on usual source file loader since we have generated normal python code
         super(LarkLoader, self).__init__(fullname, path)
@@ -31,7 +35,7 @@ class LarkLoader(filefinder2.machinery.SourceFileLoader):
         # Returns decoded string from source file
         larkstr = super(LarkLoader, self).get_source(name)
 
-        larkstr = "from lark import Lark; parser = Lark(\"\"\"{larkstr}\"\"\", parser='lalr')""".format(**locals())
+        larkstr = "from lark import Lark; parser = Lark(\"\"\"{larkstr}\"\"\", *{self.args}, **{self.kwargs})""".format(**locals())
 
         return larkstr
 

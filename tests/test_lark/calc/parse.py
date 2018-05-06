@@ -6,20 +6,16 @@
 
 from palimport import lark
 
-with lark.importer():  #parser='lalr'):
+with lark.importer(parser='lalr'):
     from . import calc
 
 
-def main():
+# to be able to test basic parsing functionality
+if __name__ == '__main__':
     while True:
         try:
             s = input('> ')
         except EOFError:
             break
         print(calc.parse(s).pretty())
-
-
-# to be able to test basic parsing functionality
-if __name__ == '__main__':
-    main()
 

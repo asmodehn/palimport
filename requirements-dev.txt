@@ -1,0 +1,9 @@
+gitchangelog
+twine
+
+# this is needed as install dependency since we embed tests in the package.
+pytest>=2.5.1
+
+# source access to latest filefinder from git ...
+# 0.4.1 has been released !
+# -e git+https://github.com/asmodehn/filefinder2.git#egg=filefinder2

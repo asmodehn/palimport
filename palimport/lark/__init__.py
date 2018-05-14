@@ -7,24 +7,28 @@ import sys
 
 # we rely on filefinder2 as a py2/3 wrapper of importlib
 import filefinder2
-
+import six
 from ._utils import _verbose_message
 
 from ._lark_finder import LarkFinder
+
+import filefinder2.machinery
+from ._lark_metaloader import LarkMetaLoader
 from ._lark_loader import LarkLoader
 
 
+
 @contextlib.contextmanager
-def importer(*args, **kwargs):
+def importer(loader, extensions):
     """Install the path-based import components."""
-    # We should plug filefinder first to avoid plugging ROSDirectoryFinder, when it is not a ROS thing...
 
     with filefinder2.enable_pep420():  # TODO : dont force it on py3 if not debugging
 
         # Resetting sys.path_importer_cache to get rid of previous importers
         sys.path_importer_cache.clear()
 
-        _lfh = LarkFinder.path_hook((functools.partial(LarkLoader, *args, **kwargs), ['.lark']))
+        # we hook the grammar customized loader
+        _lfh = LarkFinder.path_hook((loader, extensions),)
 
         if _lfh not in sys.path_hooks:
             # todo : better before or after ?

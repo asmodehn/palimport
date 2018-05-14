@@ -30,8 +30,6 @@ from filefinder2.machinery import FileFinder as filefinder2_FileFinder
 from filefinder2.machinery import ModuleSpec
 import filefinder2.util
 
-from ._lark_loader import LarkLoader
-
 
 class LarkFinder(filefinder2_FileFinder):
     """PathEntryFinder to handle finding Lark grammars"""

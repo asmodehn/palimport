@@ -2,7 +2,6 @@ import os
 from palimport import lark
 from lark import InlineTransformer
 
-# TODO : lark grammar importer
 
 class CalculateTree(InlineTransformer):
     from operator import add, sub, mul, truediv as div, neg

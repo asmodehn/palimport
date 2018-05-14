@@ -1,43 +1,32 @@
+
 import filefinder2
 import logging
 import tempfile
 import os
+import six
 
 from lark import Lark
 from._utils import _verbose_message
 
+from ._lark_metaloader import LarkMetaLoader
 
+
+@six.add_metaclass(LarkMetaLoader)
 class LarkLoader(filefinder2.machinery.SourceFileLoader):
     """
-    Python Loader for Lark files.
+    Loader for a sourcefile, where the parser is Lark
     """
 
-    def __init__(self, fullname, path, *Lark_args, **Lark_kwargs):
-
-        self.logger = logging.getLogger(__name__)
-        # to normalize input
-        path = os.path.normpath(path)
-
-        # storing Lark arguments
-        self.args = Lark_args
-        self.kwargs = Lark_kwargs
-
-        # relying on usual source file loader since we have generated normal python code
-        super(LarkLoader, self).__init__(fullname, path)
-
-    def __repr__(self):
-        return "LarkLoader/{0}({1}, {2})".format(".lark", self.name, self.path)
-
-    def get_source(self, name):
-        """Implementing actual python code from file content"""
-        path = self.get_filename(name)
-
-        # Returns decoded string from source file
-        larkstr = super(LarkLoader, self).get_source(name)
-
-        larkstr = "from lark import Lark; parser = Lark(\"\"\"{larkstr}\"\"\", *{self.args}, **{self.kwargs})""".format(**locals())
-
-        return larkstr
+    def get_code(self, fullname):
+        source = self.get_source(fullname)
+        _verbose_message('parsing code for "{0}"'.format(fullname))
+        try:
+            ast = self.source_to_ast(source, self.get_filename(fullname))
+            _verbose_message('compiling code for "{0}"'.format(fullname))
+            code = self.ast_to_code(ast, self.get_filename(fullname))
+            return code
+        except TypeError:
+            raise
 
     def source_to_code(self, data, path):
         """Return the code object compiled from source.
@@ -45,16 +34,10 @@ class LarkLoader(filefinder2.machinery.SourceFileLoader):
         """
         return compile(data, path, 'exec', dont_inherit=True)
 
-    def get_code(self, fullname):
-        source = self.get_source(fullname)
-        _verbose_message('compiling code for "{0}"'.format(fullname))
-        try:
-            code = self.source_to_code(source, self.get_filename(fullname))
-            return code
-        except TypeError:
-            raise
+    def source_to_ast(self, data, path):
+        _verbose_message('parsing code in "{0}"'.format(path))
+        return self.lark.parse(data)
 
-    # Useful ??
-    # @staticmethod
-    # def get_file_extension():
-    #     return ".lark"
+    def ast_to_code(self, ast, path):
+        pysource = interpret(ast)
+        return self.source_to_code(pysource, path)

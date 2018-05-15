@@ -1,6 +1,11 @@
 import pytest
 from lark import Lark
 
+
+with palimport.lark.importer(palimport.lark.LarkGrammarLoader, ['.lark']) as lark_parser:
+    from .. import calc
+
+
 from ..interp import calc
 
 # Testing Parsing with inline transformation

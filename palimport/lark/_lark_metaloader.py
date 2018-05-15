@@ -23,9 +23,8 @@ class LarkMetaLoader(type):
         #     _verbose_message("Overriding attribute detected : {o}. Dropping.".format(**locals()))
         #     dct.pop(o)
 
-        if 'grammar' in dct:
-            # create parser instance from existing members
-            dct['lark'] = Lark(grammar=dct.get('grammar'), parser=dct.get('parser', None), transformer=dct.get('transformer', None))
+        assert 'parser' in dct
+        assert 'transformer' in dct
 
         return super(LarkMetaLoader, meta).__new__(meta, name, bases, dct)
 
@@ -35,8 +34,6 @@ class LarkMetaLoader(type):
         print(cls)
         print(bases)
         print(dct)
-
-        #cls.lark = Lark(grammar=cls.grammar, parser=cls.parser)
 
         super(LarkMetaLoader, cls).__init__(name, bases, dct)
 

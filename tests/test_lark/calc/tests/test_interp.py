@@ -1,12 +1,9 @@
 import pytest
 from lark import Lark
 
+import palimport.lark
 
-with palimport.lark.importer(palimport.lark.LarkGrammarLoader, ['.lark']) as lark_parser:
-    from .. import calc
-
-
-from ..interp import calc
+from ..interp import interp, CalcLoader
 
 # Testing Parsing with inline transformation
 # In our case here, it does computation
@@ -14,31 +11,34 @@ from ..interp import calc
 
 def test_calc_add():
 
-    assert calc("3 + 2", ) == 5.0
+    assert interp("3 + 2", ) == "5.0"
 
 
 def test_calc_sub():
 
-    assert calc("3 - 2", ) == 1.0
+    assert interp("3 - 2", ) == "1.0"
 
 
 def test_calc_mul():
 
-    assert calc("3 * 2", ) == 6.0
+    assert interp("3 * 2", ) == "6.0"
 
 
 def test_calc_div():
 
-    assert calc("3 / 2", ) == 1.5
+    assert interp("3 / 2", ) == "1.5"
 
 
 def test_calc_assign():
 
-    assert calc("b = 2", ) == 2
+    assert interp("b = 2", ) == "b = 2.0"
 
 
+def test_module_import():
+    with palimport.lark.importer(CalcLoader, ['.calc']):
+        from .. import theanswer
 
-
+    assert theanswer.ANSWER == 42
 
 
 

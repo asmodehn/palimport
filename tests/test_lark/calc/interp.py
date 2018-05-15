@@ -34,6 +34,7 @@ class CalculatePython(InlineTransformer):
     def __init__(self):
         pass
 
+    # TODO : AST https://docs.python.org/3/library/ast.html#module-ast
     def assign_var(self, name, value):
         # translate to python code instead of direct evaluation
         return "{name} = {value}".format(**locals())
@@ -50,27 +51,25 @@ class CalcLoader(palimport.lark.LarkLoader):
     parser = calc.parser
     transformer = CalculatePython()
 
+def interp(s):
+    AST = calc.parser.parse(s)
+    pysource = CalculatePython().transform(AST)
+    # TODO : fix that in the grammar
+    if not isinstance(pysource, (str,)):
+        pysource = str(pysource)
+    return pysource
 
-with palimport.lark.importer(CalcLoader, ['.calc']):
-    try:
-        from . import theanswer
-    except SystemError:
-        import theanswer
-
-assert theanswer.ANSWER == 42
 
 # to be able to test basic interpreting functionality
 if __name__ == '__main__':
+    lcls = {}
     while True:
         try:
-            s = input('> ')
+            s = input('calc> ')
         except EOFError:
             break
-        AST = calc.parser.parse(s)
-        pycode = CalculatePython().transform(AST)
-        # TODO : fix that in the grammar
-        if not isinstance(pycode, (str,)):
-            pycode = str(pycode)
-        print(eval(pycode, {"__builtins__": None}, {}))
-        print(exec(pycode, {"__builtins__": None}, {}))
+        # Ref : http://lucumr.pocoo.org/2011/2/1/exec-in-python/
+        pysource = interp(s)
+        pycode = compile(pysource, '<string>', 'single')
+        exec(pycode, {"__builtins__": None}, lcls)
 

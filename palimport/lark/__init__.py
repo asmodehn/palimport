@@ -14,7 +14,7 @@ from ._lark_finder import LarkFinder
 
 import filefinder2.machinery
 from ._lark_metaloader import LarkMetaLoader
-from ._lark_loader import LarkLoader
+from ._lark_loader import LarkLoader, LarkGrammarLoader
 
 
 
@@ -22,9 +22,11 @@ from ._lark_loader import LarkLoader
 def importer(loader, extensions):
     """Install the path-based import components."""
 
-    with filefinder2.enable_pep420():  # TODO : dont force it on py3 if not debugging
+    with filefinder2.enable_pep420():
 
         # Resetting sys.path_importer_cache to get rid of previous importers
+        # TODO : BUG here, sometime debugger (pycharm)needs to have a break here to actually drop his importer_cache
+        # This can lead to finder not being called if Python's FileFinder is already cached (for current dir for example)
         sys.path_importer_cache.clear()
 
         # we hook the grammar customized loader

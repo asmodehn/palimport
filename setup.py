@@ -6,7 +6,7 @@ import runpy
 
 # Ref : https://packaging.python.org/single_source_version/#single-sourcing-the-version
 # runpy is safer and a better habit than exec
-version = runpy.run_path('lark_import/_version.py')
+version = runpy.run_path('palimport/_version.py')
 __version__ = version.get('__version__')
 
 
@@ -24,7 +24,7 @@ __version__ = version.get('__version__')
 # Ref setup.py command extension : https://blog.niteoweb.com/setuptools-run-custom-code-in-setup-py/
 class PrepareReleaseCommand(setuptools.Command):
     """Command to release this package to Pypi"""
-    description = "prepare a release of lark_import"
+    description = "prepare a release of palimport"
     user_options = []
 
     def initialize_options(self):
@@ -42,7 +42,7 @@ class PrepareReleaseCommand(setuptools.Command):
         # $ gitchangelog >CHANGELOG.rst
         # change version in code and changelog
         subprocess.check_call(
-            "git commit CHANGELOG.rst lark_import/_version.py -m 'v{0}'".format(__version__), shell=True)
+            "git commit CHANGELOG.rst palimport/_version.py -m 'v{0}'".format(__version__), shell=True)
         subprocess.check_call("git push", shell=True)
 
         print("You should verify travis checks, and you can publish this release with :")
@@ -53,7 +53,7 @@ class PrepareReleaseCommand(setuptools.Command):
 # Ref setup.py command extension : https://blog.niteoweb.com/setuptools-run-custom-code-in-setup-py/
 class PublishCommand(setuptools.Command):
     """Command to release this package to Pypi"""
-    description = "releases lark_import to Pypi"
+    description = "releases palimport to Pypi"
     user_options = []
 
     def initialize_options(self):
@@ -81,15 +81,15 @@ class PublishCommand(setuptools.Command):
         sys.exit()
 
 
-setuptools.setup(name='lark_import',
+setuptools.setup(name='palimport',
     version=__version__,
     description='Lark grammar files python importer ',
-    url='http://github.com/asmodehn/lark_import',
+    url='http://github.com/asmodehn/palimport',
     author='AlexV',
     author_email='asmodehn@gmail.com',
     license='MIT',
     packages=[
-        'lark_import'
+        'palimport'
     ],
     include_package_data=True,  # to rely on MANIFEST.in
     # Reference for optional dependencies :

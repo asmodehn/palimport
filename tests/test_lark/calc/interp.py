@@ -3,28 +3,11 @@ import palimport.lark
 from lark import InlineTransformer
 
 
-# class CalculateTree(InlineTransformer):
-#     from operator import add, sub, mul, truediv as div, neg
-#     number = float
-#
-#     def __init__(self):
-#         self.vars = {}
-#
-#     def assign_var(self, name, value):
-#         self.vars[name] = value
-#         return value
-#
-#     def var(self, name):
-#         return self.vars[name]
-
-
-
 with palimport.lark.importer(palimport.lark.LarkGrammarLoader, ['.lark']):
     if __package__ is None:
         import calc
     else:  # attempting relative import when possible
         from . import calc
-
 
 
 class CalculatePython(InlineTransformer):
@@ -50,6 +33,7 @@ class CalcLoader(palimport.lark.LarkLoader):
     """
     parser = calc.parser
     transformer = CalculatePython()
+
 
 def interp(s):
     AST = calc.parser.parse(s)

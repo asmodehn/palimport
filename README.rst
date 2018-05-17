@@ -3,17 +3,16 @@ palimport
 
 Palimpsest importer for python
 
-Palimport allows you to import module, that can be defined in any language, as long as you provide a way to interpret it ( in python !)
+Palimport allows you to import modules that can be defined in any custom language, as long as you provide a grammar and way to interpret it ( in python !)
 
-It is also possible to mix modules written in different languages ::
-
-
-
-
-This way you can embed multiple DSLs in your
+This way you can embed multiple DSLs in your python programs.
 
 Supported parsers :
 
 - lark
 - more to come
+
+Currently tested with python 3.5::
+
+    pytest tests/
 

@@ -1,7 +1,7 @@
-import palimport.lark
+import palimport._lark
 
 
-with palimport.lark.importer(palimport.lark.LarkGrammarLoader, ['.lark']):
+with palimport._lark.Importer():
     if __package__ is None:
         import calc
     else:  # attempting relative import when possible

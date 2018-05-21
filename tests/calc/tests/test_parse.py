@@ -1,12 +1,13 @@
 import pytest
-import palimport.lark
+import palimport._lark
 
 """
 Module testing that the calc.lark grammar actually parses string as expected
 """
 
-with palimport.lark.importer(palimport.lark.LarkGrammarLoader, ['.lark']) as lark_parser:
+with palimport.LarkImporter():
     from .. import calc
+
 
 def test_calc_add():
 

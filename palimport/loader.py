@@ -1,52 +1,19 @@
 
 import filefinder2
-import logging
-import tempfile
-import os
-import six
 
-from lark import Lark
-from._utils import _verbose_message
-
-from ._lark_metaloader import LarkMetaLoader
+from palimport._utils import _verbose_message
 
 
-
-
-class LarkGrammarLoader(filefinder2.machinery.SourceFileLoader):
-
-    # TODO : investigate : removing get_code breaks loader !!!
-    def get_code(self, fullname):
-        try:
-            source = self.get_source(fullname)
-        except Exception:
-            print("get_code Exception")
-            raise
-        _verbose_message('compiling code for "{0}"'.format(fullname))
-        try:
-            code = self.source_to_code(source, self.get_filename(fullname))
-            return code
-        except TypeError:
-            raise
-
-    def get_source(self, name):
-        """Implementing actual python code from file content"""
-        path = self.get_filename(name)
-
-        # Returns decoded string from source file
-        larkstr = super(LarkGrammarLoader, self).get_source(name)
-        larkstr = "from lark import Lark; parser = Lark(\"\"\"{larkstr}\"\"\", parser='lalr')""".format(**locals())
-
-        return larkstr
-
-
-@six.add_metaclass(LarkMetaLoader)
-class LarkLoader(filefinder2.machinery.SourceFileLoader):
+class Loader(filefinder2.machinery.SourceFileLoader):
     """
-    Loader for a sourcefile, where the parser is Lark
+    Loader base class for a sourcefile in a custom langauge.
+    Currently supported parsers :
+     - lark
+
+    To define you own loader, you should extend this class
     """
 
-    parser = None  # mandatory class member. Need to be defined by any derived class
+    parser = None  # mandatory class member. Need to be defined by any derived class
     transformer = None  # mandatory class member. Need to be defined by any derived class
 
     # def get_code(self, fullname):
@@ -71,7 +38,8 @@ class LarkLoader(filefinder2.machinery.SourceFileLoader):
 
         _verbose_message('transforming code for "{0}"'.format(fullname))
 
-        transformed_source = self.transformer.transform(self.parser.parse(source))
+        parsed_source = self.parser.parse(source)
+        transformed_source = self.transformer.transform(parsed_source)
 
         _verbose_message('compiling code for "{0}"'.format(fullname))
         try:

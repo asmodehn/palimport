@@ -1,11 +1,11 @@
 import pytest
 from lark import Lark
 
-import palimport.lark
+import palimport._lark
 
 from ..interp import interp, CalcLoader
 
-# Testing Parsing with inline transformation
+# Testing Parsing with inline transformation
 # In our case here, it does computation
 
 
@@ -35,7 +35,7 @@ def test_calc_assign():
 
 
 def test_module_import():
-    with palimport.lark.importer(CalcLoader, ['.calc']):
+    with palimport.Importer(CalcLoader, ['.calc']):
         from .. import theanswer
 
     assert theanswer.ANSWER == 42

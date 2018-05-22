@@ -1,7 +1,6 @@
 import pytest
-from lark import Lark
 
-import palimport._lark
+import palimport
 
 from ..interp import interp, CalcLoader
 
@@ -39,8 +38,6 @@ def test_module_import():
         from .. import theanswer
 
     assert theanswer.ANSWER == 42
-
-
 
 
 if __name__ == '__main__':

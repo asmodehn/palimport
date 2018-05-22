@@ -1,13 +1,12 @@
-import os
-import palimport._lark
+import palimport
 from lark import InlineTransformer
 
 
-with palimport.LarkImporter():
-    if __package__ is None:
-        import calc
-    else:  # attempting relative import when possible
-        from . import calc
+if __package__:
+    # attempting relative import when possible
+    from .parse import calc
+else:
+    from parse import calc
 
 
 class CalculatePython(InlineTransformer):

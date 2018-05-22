@@ -1,12 +1,11 @@
-import palimport._lark
+import palimport
 
 
-with palimport._lark.Importer():
-    if __package__ is None:
-        import calc
-    else:  # attempting relative import when possible
+with palimport.LarkImporter():
+    if __package__:  # attempting relative import when possible
         from . import calc
-
+    else:
+        import calc
 
 # # to be able to test basic parsing functionality
 if __name__ == '__main__':

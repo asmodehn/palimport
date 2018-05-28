@@ -11,6 +11,7 @@ def _verbose_message(message, *args, **kwargs):
             message = '# ' + message
         print(message.format(*args), file=sys.stderr)
 
+
 try:
     ImportError('msg', name='name', path='path')
 except TypeError:

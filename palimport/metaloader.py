@@ -1,13 +1,4 @@
-import filefinder2
-import logging
-import tempfile
-import os
-
-from lark import Lark
-from._utils import _verbose_message
-
-
-class LarkMetaLoader(type):
+class MetaLoader(type):
     def __new__(meta, name, bases, dct):
         print('-----------------------------------')
         print("Allocating memory for class", name)
@@ -26,7 +17,7 @@ class LarkMetaLoader(type):
         assert 'parser' in dct
         assert 'transformer' in dct
 
-        return super(LarkMetaLoader, meta).__new__(meta, name, bases, dct)
+        return super(MetaLoader, meta).__new__(meta, name, bases, dct)
 
     def __init__(cls, name, bases, dct):
         print('-----------------------------------')
@@ -35,7 +26,7 @@ class LarkMetaLoader(type):
         print(bases)
         print(dct)
 
-        super(LarkMetaLoader, cls).__init__(name, bases, dct)
+        super(MetaLoader, cls).__init__(name, bases, dct)
 
         # todo add somerelated stuff to grammar
 

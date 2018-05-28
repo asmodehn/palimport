@@ -6,8 +6,7 @@ import site
 from collections import OrderedDict
 
 """
-A module to setup custom importer for .msg and .srv files
-Upon import, it will first find the .msg file, then generate the python module for it, then load it.
+A module to setup custom importer for any files
 
 TODO...
 """
@@ -22,23 +21,21 @@ import sys
 
 import logging
 
-from ._utils import _ImportError, _verbose_message
-
-# TODO : do not force it
+from ._utils import _verbose_message
 
 from filefinder2.machinery import FileFinder as filefinder2_FileFinder
 from filefinder2.machinery import ModuleSpec
 import filefinder2.util
 
 
-class LarkFinder(filefinder2_FileFinder):
+class Finder(filefinder2_FileFinder):
     """PathEntryFinder to handle finding Lark grammars"""
 
     def __init__(self, path, *loader_details):
-        super(LarkFinder, self).__init__(path, *loader_details)
+        super(Finder, self).__init__(path, *loader_details)
 
     def __repr__(self):
-        return 'LarkFinder({!r})'.format(self.path)
+        return 'Finder({!r})'.format(self.path)
 
     @classmethod
     def path_hook(cls, *loader_details):
@@ -52,20 +49,20 @@ class LarkFinder(filefinder2_FileFinder):
          This is different from default python behavior
          but prevent polluting the cache with custom finders
         """
-        def path_hook_for_LarkFinder(path):
+        def path_hook_for_palimport_Finder(path):
             """Path hook for importlib.machinery.FileFinder."""
 
             if not (os.path.isdir(path)):
-                raise _ImportError('only directories are supported')
+                raise filefinder2.ImportError('only directories are supported')
 
             exts = [x for ld in loader_details for x in ld[1]]
             if not any(fname.endswith(ext) for fname in os.listdir(path) for ext in exts):
-                raise _ImportError(
+                raise filefinder2.ImportError(
                     'only directories containing {ext} files are supported'.format(ext=", ".join(exts)),
                     path=path)
             return cls(path, *loader_details)
 
-        return path_hook_for_LarkFinder
+        return path_hook_for_palimport_Finder
 
     def find_spec(self, fullname, target=None):
         """
@@ -83,6 +80,6 @@ class LarkFinder(filefinder2_FileFinder):
                 return self._get_spec(loader_class, fullname, full_path, None, target)
 
         # Otherwise, we try find python modules (to be able to embed .lark files within python packages)
-        return super(LarkFinder, self).find_spec(fullname=fullname, target=target)
+        return super(Finder, self).find_spec(fullname=fullname, target=target)
 
 

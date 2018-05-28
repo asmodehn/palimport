@@ -1,13 +1,12 @@
-import os
-import palimport.lark
+import palimport
 from lark import InlineTransformer
 
 
-with palimport.lark.importer(palimport.lark.LarkGrammarLoader, ['.lark']):
-    if __package__ is None:
-        import calc
-    else:  # attempting relative import when possible
-        from . import calc
+if __package__:
+    # attempting relative import when possible
+    from .parse import calc
+else:
+    from parse import calc
 
 
 class CalculatePython(InlineTransformer):
@@ -17,7 +16,7 @@ class CalculatePython(InlineTransformer):
     def __init__(self):
         pass
 
-    # TODO : AST https://docs.python.org/3/library/ast.html#module-ast
+    # TODO : AST https://docs.python.org/3/library/ast.html#module-ast
     def assign_var(self, name, value):
         # translate to python code instead of direct evaluation
         return "{name} = {value}".format(**locals())
@@ -27,7 +26,7 @@ class CalculatePython(InlineTransformer):
         return "{name}".format(**locals())
 
 
-class CalcLoader(palimport.lark.LarkLoader):
+class CalcLoader(palimport.Loader):
     """
     Custom Loader, loading a custom AST into python code.
     """

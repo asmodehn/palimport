@@ -1,6 +1,9 @@
 palimport
 =========
 
+.. image:: https://travis-ci.org/asmodehn/palimport.svg?branch=master
+    :target: https://travis-ci.org/asmodehn/palimport
+
 Palimpsest importer for python
 
 Palimport allows you to import modules that can be defined in any custom language, as long as you provide a grammar and way to interpret it ( in python !)

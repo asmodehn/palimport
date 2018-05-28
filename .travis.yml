@@ -10,7 +10,7 @@ python:
   - 3.5
   - 3.6
   - pypy
-  - pypy3
+#  - pypy3  # currently not working because of https://bitbucket.org/pypy/pypy/issues/2834/import-pypy3-filefinder-path-hooks-and
 
 before_install:
 

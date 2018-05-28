@@ -1,6 +1,13 @@
+import palimport
 
-import coconut
-import coconut.convenience  # should be enough to setup the importer in metapath (actually turning on autocompilation)
+with palimport.CoconutImporter():
+    if __package__:  # attempting relative import when possible
+        from . import fact
+    else:
+        import fact
+
+#import coconut
+#import coconut.convenience  # should be enough to setup the importer in metapath (actually turning on autocompilation)
 
 from . import fact
 

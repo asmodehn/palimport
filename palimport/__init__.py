@@ -16,6 +16,7 @@ import filefinder2.machinery
 # Importing Parser's Grammar importers
 from ._lark import Importer as LarkImporter
 
+from ._coconut import Importer as CoconutImporter
 
 from .finder import Finder
 from .loader import Loader

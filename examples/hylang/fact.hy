@@ -6,5 +6,5 @@
       acc
       (recur (dec i) (* acc i)))))
 
-# Test
-#(factorial 1000)
+;; Test
+;; (factorial 1000)

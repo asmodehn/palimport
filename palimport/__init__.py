@@ -17,6 +17,9 @@ import filefinder2.machinery
 from ._lark import Importer as LarkImporter
 
 
+from ._hylang import Importer as HyImporter
+
+
 from .finder import Finder
 from .loader import Loader
 

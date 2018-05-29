@@ -5,8 +5,3 @@ def factorial(n is int if n > 0) =
     """Compute n! where n is an integer >= 0."""
     range(1, n+1) |> reduce$(*)
 
-# Test cases:
--1 |> factorial |> print  # MatchError
-0.5 |> factorial |> print  # MatchError
-0 |> factorial |> print  # 1
-3 |> factorial |> print  # 6

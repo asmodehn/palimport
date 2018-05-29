@@ -15,7 +15,7 @@ class Importer(filefinder2.Py3Importer):
         super(Importer, self).__enter__()
 
         # we hook the grammar customized loader
-        self.path_hook = CoconutFinder.path_hook((CoconutLoader, ['.coco']), )
+        self.path_hook = CoconutFinder.path_hook((CoconutLoader, ['.coco', '.coc', '.coconut']), )
 
         if self.path_hook not in sys.path_hooks:
             ffidx = sys.path_hooks.index(filefinder2.ff_path_hook)

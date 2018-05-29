@@ -12,7 +12,7 @@ class CoconutLoader(filefinder2.machinery.SourceFileLoader):
 
     def __init__(self, fullname, path):
         """Initializes Coconut's compiler"""
-        self.compiler = Compiler()
+        self.compiler = Compiler(target=None, strict=True, minify=False, line_numbers=True, keep_lines=True, no_tco=False)
         super(CoconutLoader, self).__init__(fullname=fullname, path=path)
 
     # TODO : investigate : removing get_code breaks loader !!!
@@ -20,7 +20,7 @@ class CoconutLoader(filefinder2.machinery.SourceFileLoader):
         source = self.get_source(fullname)
 
         _verbose_message('transpiling coconut for "{0}"'.format(fullname))
-        pysource = self.compiler.parse_file(source)
+        pysource = self.compiler.parse_file(source, addhash=False)  # hash is needed only if we produce bytecode (TODO)
 
         _verbose_message('compiling code for "{0}"'.format(fullname))
         try:
